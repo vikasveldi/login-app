@@ -24,7 +24,7 @@ You can deploy this application on an **Azure Ubuntu VM** using either **Docker 
 ## ✅ Prerequisites
 
 - Azure Virtual Machine (Ubuntu 20.04 / 22.04 / 24.04)
-- Port **80** allowed in Azure **Network Security Group (NSG)**
+- Port **80** **22** **30000-32767** allowed in Azure **Network Security Group (NSG)**
 - SSH access to the VM
 
 ---
