@@ -1,0 +1,39 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('Checkout') {
+      steps {
+        git branch: 'main', url: 'https://github.com/vikasveldi/login-app.git'
+      }
+    }
+
+    stage('Build') {
+      steps {
+        sh 'docker build -t vikasveldi/login-app:v1 .'
+      }
+    }
+    stage('Login to DockerHub') {
+      steps {
+        withCredentials([usernamePassword(
+          credentialsId: 'docker-credentials',
+          usernameVariable: 'DOCKER_USER',
+          passwordVariable: 'DOCKER_PASS'
+        )]) {
+          sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+        }
+      }
+    }
+    stage('Push') {
+      steps {
+        sh 'docker push vikasveldi/login-app:v1'
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        sh 'docker run -dt --name login-con -p 80:80 vikasveldi/login-app:v1'
+      }
+    }
+  }
+}
